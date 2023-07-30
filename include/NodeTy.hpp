@@ -7,17 +7,27 @@
 namespace graph {
 
 class NodeTy final {
+    std::vector<NodeTy*> Parents;
     std::vector<NodeTy*> Children;
-    unsigned NodeID;
+    const unsigned NodeID;
 
     public:
     NodeTy(const unsigned NodeID) : NodeID{NodeID} {}
+    void removeDublicates();
+
+    void clearChildren() { Children.clear(); }
+    void clearParents() { Parents.clear(); }
 
     void addNewChild(NodeTy *Node) { Children.push_back(Node); }
-    void reverseT1() { Children.push_back(this); }
+    void addNewParent(NodeTy *Node) { Parents.push_back(Node); }
+
+    void T1();
+
+    void reverseT1();
     void reverseT2(NodeTy *Node);
 
     const std::vector<NodeTy*> &getChildren() const { return Children; }
+    const std::vector<NodeTy*> &getParents() const { return Parents; }
     unsigned getID() const { return NodeID; }
 };
 
