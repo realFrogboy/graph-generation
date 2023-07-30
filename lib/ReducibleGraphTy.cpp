@@ -2,28 +2,10 @@
 
 #include <random>
 
-namespace {
-
-template<class T>
-struct movable_il {
-  mutable T t;
-  operator T() const&& { return std::move(t); }
-  movable_il( T&& in ): t(std::move(in)) {}
-};
-
-template<class T, class A=std::allocator<T>>
-std::vector<T,A> vector_from_il( std::initializer_list< movable_il<T> > il ) {
-  std::vector<T,A> r( std::make_move_iterator(il.begin()), std::make_move_iterator(il.end()) );
-  return r;
-}
-
-}
-
 namespace graph {
 
 ReducibleGraphTy::ReducibleGraphTy(const size_t Size) {
     Nodes.emplace_back(std::make_unique<NodeTy>(0));
-    Root = Nodes.front().get();
     Generate(Size); 
 }
 
@@ -56,13 +38,10 @@ void ReducibleGraphTy::reverseT1() const {
 }
 
 void ReducibleGraphTy::reverseT2() {
-    NodeTy *Node = addNewNode();
-
     NodeTy *GraphNode = getRandomNode();
-    while (Node == GraphNode) 
-        GraphNode = getRandomNode();
+    NodeTy *NewNode = addNewNode();
     
-    GraphNode->reverseT2(Node);
+    GraphNode->reverseT2(NewNode);
 }
 
 void ReducibleGraphTy::print() const {

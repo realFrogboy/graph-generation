@@ -11,16 +11,15 @@ class ReducibleGraphTy final {
     using NodePtr = std::unique_ptr<NodeTy>;
 
     std::vector<NodePtr> Nodes;
-    NodeTy *Root;
 
     NodeTy *getRandomNode() const;
     NodeTy *addNewNode();
+    void reverseT1() const;
+    void reverseT2();
     void Generate(const size_t Size);
 
     public:
     ReducibleGraphTy(const size_t Size);
-    void reverseT1() const;
-    void reverseT2();
     void print() const;
 };
 
