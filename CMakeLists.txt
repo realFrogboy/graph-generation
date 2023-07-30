@@ -6,6 +6,10 @@ if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE Debug)
 endif()
 
+if (DUMP)
+    add_definitions(-DDUMP)
+endif()
+
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     set (COMPILER_SETTINGS -g -Wall -Wextra -Wpedantic)
 else ()
@@ -13,7 +17,7 @@ else ()
 endif ()
 add_compile_options(${COMPILER_SETTINGS})
 
-set (SOURCES lib/main.cpp lib/NodeTy.cpp lib/ReducibleGraphTy.cpp)
+set (SOURCES lib/main.cpp lib/NodeTy.cpp lib/ReducibleGraphTy.cpp lib/DominanceTreeTy.cpp)
 
 add_executable (${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE include)

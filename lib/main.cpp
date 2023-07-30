@@ -1,4 +1,5 @@
 #include "ReducibleGraphTy.hpp"
+#include "DominanceTreeTy.hpp"
 
 #include <iostream>
 #include <exception>
@@ -10,7 +11,6 @@ int main() {
 
         std::cout << "Redusible graph generation..." << std::endl;
         graph::ReducibleGraphTy ReducibleGraph{GraphSize};
-        ReducibleGraph.runDFS();
         ReducibleGraph.print();
         std::cout << "Redusible graph generation: done" << std::endl;
 

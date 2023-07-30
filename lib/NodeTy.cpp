@@ -20,11 +20,14 @@ namespace graph {
 void NodeTy::removeDublicates() {
     std::sort(Children.begin(), Children.end());
     Children.erase(std::unique(Children.begin(), Children.end()), Children.end());
+
+    std::sort(Parents.begin(), Parents.end());
+    Parents.erase(std::unique(Parents.begin(), Parents.end()), Parents.end());
 }
 
-void NodeTy::T1() { 
-    Parents.erase(std::remove(Parents.begin(), Parents.end(), this), Parents.end());
+void NodeTy::T1() {
     Children.erase(std::remove(Children.begin(), Children.end(), this), Children.end());
+    Parents.erase(std::remove(Parents.begin(), Parents.end(), this), Parents.end());
 }
 
 void NodeTy::reverseT1() { 
@@ -38,11 +41,7 @@ void NodeTy::reverseT2(NodeTy *Node) {
             Node->Children.push_back(Child);
             Child->Parents.push_back(Node);
             if (randomBool()) {
-                auto It = std::find(Child->Parents.begin(), Child->Parents.end(), this);
-                if (It == Child->Parents.end())
-                    throw std::runtime_error("incorrect T2");
-                
-                Child->Parents.erase(It);
+                Child->Parents.erase(std::remove(Child->Parents.begin(), Child->Parents.end(), this), Child->Parents.end());
                 return 1;
             }
         }
