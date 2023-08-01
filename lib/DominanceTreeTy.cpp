@@ -1,5 +1,7 @@
 #include "DominanceTreeTy.hpp"
 
+#include <fstream>
+
 namespace graph {
 
 void DFSTy::run(NodeTy *Root) { 
@@ -86,14 +88,19 @@ void DominanceTreeTy::generate() {
     for (auto &Node : Nodes) {
         Node->clearChildren();
         Node->clearParents();
-        Node->addNewParent(getIDominator(Node.get()));
     }
 
-    Nodes.front()->clearParents();
+    for (auto &Node : Nodes) {
+        NodeTy *Parent = getIDominator(Node.get());
+        Node->addNewParent(Parent);
+        Parent->addNewChild(Node.get());
+    }
+
+    Nodes.front()->T1();
 }
 
 void DominanceTreeTy::print() const {
-    std::ofstream File("DomTreeDump.dot");
+    std::ofstream File("DomTree.dot");
     File << "digraph tree {\n";
 
     for (auto &Node : Nodes) {

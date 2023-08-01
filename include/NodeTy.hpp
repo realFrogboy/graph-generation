@@ -2,7 +2,6 @@
 
 #include <memory>
 #include <vector>
-#include <fstream>
 
 namespace graph {
 
@@ -18,6 +17,7 @@ class NodeTy final {
     void clearChildren() { Children.clear(); }
     void clearParents() { Parents.clear(); }
 
+    void addNewChild(NodeTy *Node) { Children.push_back(Node); }
     void addNewParent(NodeTy *Node) { Parents.push_back(Node); }
 
     void T1();

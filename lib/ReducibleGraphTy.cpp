@@ -1,6 +1,7 @@
 #include "ReducibleGraphTy.hpp"
 
 #include <random>
+#include <fstream>
 
 namespace graph {
 
@@ -53,7 +54,7 @@ void ReducibleGraphTy::reverseT2() {
 }
 
 void ReducibleGraphTy::print() const {
-    std::ofstream File("Dump.dot");
+    std::ofstream File("ReducibleGraph.dot");
     File << "digraph tree {\n";
 
     for (auto &Node : Nodes) {

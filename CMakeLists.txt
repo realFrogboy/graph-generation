@@ -17,7 +17,7 @@ else ()
 endif ()
 add_compile_options(${COMPILER_SETTINGS})
 
-set (SOURCES lib/main.cpp lib/NodeTy.cpp lib/ReducibleGraphTy.cpp lib/DominanceTreeTy.cpp)
+set (SOURCES lib/main.cpp lib/NodeTy.cpp lib/ReducibleGraphTy.cpp lib/DominanceTreeTy.cpp lib/DJGraphTy.cpp)
 
 add_executable (${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE include)

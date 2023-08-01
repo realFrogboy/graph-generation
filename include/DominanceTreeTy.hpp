@@ -37,6 +37,8 @@ class DominanceTreeTy final {
     public:
     DominanceTreeTy(const ReducibleGraphTy &Graph);
     void print() const;
+
+    const NodeTy *getNode(const unsigned NodeID) const { return Nodes[NodeID].get(); }
 };
 
 } // namespace graph

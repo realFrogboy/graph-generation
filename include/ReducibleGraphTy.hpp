@@ -24,8 +24,8 @@ class ReducibleGraphTy final {
     ReducibleGraphTy(const size_t Size);
     void print() const;
 
-    NodeTy *getRoot() const { return Nodes.front().get(); }
     size_t getNNodes() const { return Nodes.size(); }
+    const NodeTy *getNode(const unsigned NodeID) const { return Nodes[NodeID].get(); }
     const std::vector<NodePtr> &getNodes() const { return Nodes; }
 };
 
