@@ -4,7 +4,7 @@
 
 namespace graph {
 
-DJGraphTy::DJGraphTy(const ReducibleGraphTy &Graph, const DominanceTreeTy &DominanceTree) {
+DJGraphTy::DJGraphTy(const ReducibleGraphTy &Graph, const DominanceTreeTy &DominanceTree) : Dump{GraphDumpTy{}} {
     for (unsigned i = 0; i < Graph.getNNodes(); ++i)
         Nodes.emplace_back(std::make_unique<NodeTy>(i));
 
@@ -21,23 +21,6 @@ DJGraphTy::DJGraphTy(const ReducibleGraphTy &Graph, const DominanceTreeTy &Domin
                 Node->addNewChild(Nodes[Child->getID()].get());
         }
     }
-}
-
-void DJGraphTy::print() const {
-    std::ofstream File("DJGraph.dot");
-    File << "digraph tree {\n";
-
-    for (auto &Node : Nodes) {
-        File << "\tnode" << Node->getID() << " [shape = \"record\", label = \"" << Node->getID() << "\"];\n";
-    }
-
-    for (auto &Node : Nodes) {
-        for (auto Child : Node->getChildren())
-            File << "node" << Node->getID() << " -> node" << Child->getID() << ";\n";
-    }
-
-    File << "}";
-    return;
 }
 
 } // namespace graph

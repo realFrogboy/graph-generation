@@ -1,11 +1,13 @@
 #pragma once
 
 #include "NodeTy.hpp"
+#include "GraphDumpTy.hpp"
 #include "ReducibleGraphTy.hpp"
 
 #include <set>
 #include <memory>
 #include <vector>
+#include <functional>
 #include <unordered_map>
 
 namespace graph {
@@ -23,6 +25,7 @@ class DominanceTreeTy final {
     std::vector<NodePtr> Nodes;
     std::vector<std::set<NodeTy*>> DominatorSets;
     std::unique_ptr<DFSTy> DFS;
+    std::function<void(const std::vector<NodePtr> &, const std::string &)> Dump;
 
     static std::set<NodeTy*> Intersection(std::set<NodeTy*> &Lhs, std::set<NodeTy*> &Rhs);
 
@@ -36,7 +39,7 @@ class DominanceTreeTy final {
 
     public:
     DominanceTreeTy(const ReducibleGraphTy &Graph);
-    void print() const;
+    void print() const {  Dump(Nodes, "DomTree.dot"); }
 
     const NodeTy *getNode(const unsigned NodeID) const { return Nodes[NodeID].get(); }
 };

@@ -5,7 +5,7 @@
 
 namespace graph {
 
-ReducibleGraphTy::ReducibleGraphTy(const size_t Size) {
+ReducibleGraphTy::ReducibleGraphTy(const size_t Size) : Dump{GraphDumpTy{}} {
     Nodes.emplace_back(std::make_unique<NodeTy>(0));
     generate(Size); 
 }
@@ -52,22 +52,5 @@ void ReducibleGraphTy::reverseT2() {
     
     GraphNode->reverseT2(NewNode);
 }
-
-void ReducibleGraphTy::print() const {
-    std::ofstream File("ReducibleGraph.dot");
-    File << "digraph tree {\n";
-
-    for (auto &Node : Nodes) {
-        File << "\tnode" << Node->getID() << " [shape = \"record\", label = \"" << Node->getID() << "\"];\n";
-    }
-
-    for (auto &Node : Nodes) {
-        for (auto Child : Node->getChildren())
-            File << "node" << Node->getID() << " -> node" << Child->getID() << ";\n";
-    }
-
-    File << "}";
-    return;
-} 
 
 } // namespace graph

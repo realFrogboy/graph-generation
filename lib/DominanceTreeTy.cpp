@@ -31,7 +31,7 @@ std::set<NodeTy*> DominanceTreeTy::Intersection(std::set<NodeTy*> &Lhs, std::set
     return Intersection;
 }
 
-DominanceTreeTy::DominanceTreeTy(const ReducibleGraphTy &Graph) : DominatorSets(Graph.getNNodes()), DFS{std::make_unique<DFSTy>()} {
+DominanceTreeTy::DominanceTreeTy(const ReducibleGraphTy &Graph) : DominatorSets(Graph.getNNodes()), DFS{std::make_unique<DFSTy>()}, Dump{GraphDumpTy{}} {
     Nodes.reserve(Graph.getNNodes());
     for (auto &Node : Graph.getNodes())
         Nodes.emplace_back(std::make_unique<NodeTy>(*(Node.get())));
@@ -97,23 +97,6 @@ void DominanceTreeTy::generate() {
     }
 
     Nodes.front()->T1();
-}
-
-void DominanceTreeTy::print() const {
-    std::ofstream File("DomTree.dot");
-    File << "digraph tree {\n";
-
-    for (auto &Node : Nodes) {
-        File << "\tnode" << Node->getID() << " [shape = \"record\", label = \"" << Node->getID() << "\"];\n";
-    }
-
-    for (auto &Node : Nodes) {
-        for (auto Parent : Node->getParents())
-            File << "node" << Parent->getID() << " -> node" << Node->getID() << ";\n";
-    }
-
-    File << "}";
-    return;
 }
 
 } // namespace graph
