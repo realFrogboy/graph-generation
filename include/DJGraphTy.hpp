@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NodeTy.hpp"
+#include "GraphTy.hpp"
 #include "GraphDumpTy.hpp"
 #include "ReducibleGraphTy.hpp"
 #include "DominanceTreeTy.hpp"
@@ -11,10 +12,7 @@
 
 namespace graph {
 
-class DJGraphTy final {
-    using NodePtr = std::unique_ptr<NodeTy>;
-
-    std::vector<NodePtr> Nodes;
+class DJGraphTy final : public GraphTy {
     std::function<void(const std::vector<NodePtr> &, const std::string &)> Dump;
 
     public:

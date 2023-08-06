@@ -5,7 +5,7 @@
 
 namespace graph {
 
-ReducibleGraphTy::ReducibleGraphTy(const size_t Size) : Dump{GraphDumpTy{}} {
+ReducibleGraphTy::ReducibleGraphTy(const size_t Size) : GraphTy{}, Dump{GraphDumpTy{}} {
     Nodes.emplace_back(std::make_unique<NodeTy>(0));
     generate(Size); 
 }

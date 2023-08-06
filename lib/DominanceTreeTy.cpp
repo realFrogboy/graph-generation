@@ -1,13 +1,15 @@
+#include "Utils.hpp"
 #include "DominanceTreeTy.hpp"
 
 #include <fstream>
+#include <numeric>
 
 namespace graph {
 
-void DFSTy::run(NodeTy *Root) { 
-    std::vector<NodeTy*> Stack{Root};
+void DominanceTreeTy::DominatorSearcher::DFSTy::run(const NodeTy *Root) { 
+    std::vector<const NodeTy*> Stack{Root};
     while (!Stack.empty()) {
-        NodeTy *Node = Stack.back();
+        const NodeTy *Node = Stack.back();
         Stack.pop_back();
 
         Positions.try_emplace(Node->getID(), Positions.size());
@@ -18,7 +20,7 @@ void DFSTy::run(NodeTy *Root) {
     }
 }
 
-std::set<NodeTy*> DominanceTreeTy::Intersection(std::set<NodeTy*> &Lhs, std::set<NodeTy*> &Rhs) {
+std::set<NodeTy*> DominanceTreeTy::DominatorSearcher::Intersection(std::set<NodeTy*> &Lhs, std::set<NodeTy*> &Rhs) {
     if (Lhs.empty())
         return Rhs;
 
@@ -31,22 +33,16 @@ std::set<NodeTy*> DominanceTreeTy::Intersection(std::set<NodeTy*> &Lhs, std::set
     return Intersection;
 }
 
-DominanceTreeTy::DominanceTreeTy(const ReducibleGraphTy &Graph) : DominatorSets(Graph.getNNodes()), DFS{std::make_unique<DFSTy>()}, Dump{GraphDumpTy{}} {
-    Nodes.reserve(Graph.getNNodes());
-    for (auto &Node : Graph.getNodes())
-        Nodes.emplace_back(std::make_unique<NodeTy>(*(Node.get())));
-    runDFS();
-    generate();
-}
+void DominanceTreeTy::DominatorSearcher::search(const ReducibleGraphTy &Graph) {
+    DFS->run(Graph.getRoot());
 
-void DominanceTreeTy::initDominatorSets() {
     // Dom(entry) = entry
-    DominatorSets.front().insert(Nodes.front().get());
+    DominatorSets.front().insert(Graph.getRoot());
 
     bool Changed = 1;
     while (Changed) {
         Changed = 0;
-        for (auto &Node : Nodes) {
+        for (auto &Node : Graph.getNodes()) {
             std::set<NodeTy*> Intersec;
             for (auto Parent : Node->getParents())
                 Intersec = Intersection(Intersec, DominatorSets[Parent->getID()]);
@@ -65,37 +61,41 @@ void DominanceTreeTy::initDominatorSets() {
     }
 }
 
-NodeTy *DominanceTreeTy::getIDominator(NodeTy *Node) const {
-    NodeTy *IDom = Nodes.front().get();
-    unsigned DFSPos = 0;
+DominanceTreeTy::DominatorSearcher::DominatorSearcher(const ReducibleGraphTy &Graph) : DFS{std::make_unique<DFSTy>()}, DominatorSets(Graph.getNNodes()) {
+    search(Graph);
+}
 
-    for (auto Dominator : DominatorSets[Node->getID()]) {
-        if (Dominator == Node)
+size_t DominanceTreeTy::DominatorSearcher::getIDominator(const size_t NodeID) const {    
+    size_t IDom = 0;
+    size_t DFSPos = 0;
+
+    for (auto Dominator : DominatorSets[NodeID]) {
+        size_t DomID = Dominator->getID();
+        if (DomID == NodeID)
             continue;
         
-        unsigned Pos = getDFSPosition(Dominator->getID());
+        unsigned Pos = DFS->getPosition(DomID);
         if (Pos > DFSPos) {
             DFSPos = Pos;
-            IDom = Dominator;
+            IDom = DomID;
         }
     }
     return IDom;
 }
 
+DominanceTreeTy::DominanceTreeTy(const ReducibleGraphTy &Graph) : GraphTy{Graph.getNNodes()}, DS{std::make_unique<DominatorSearcher>(Graph)}, Dump{GraphDumpTy{}} {
+    std::iota(Nodes.begin(), Nodes.end(), utils::MakeUnique<NodeTy>(0));
+    generate();
+}
+
 void DominanceTreeTy::generate() {
-    initDominatorSets();
-
     for (auto &Node : Nodes) {
-        Node->clearChildren();
-        Node->clearParents();
-    }
+        size_t ParentID = DS->getIDominator(Node->getID());
+        NodeTy *Parent = getNode(ParentID);
 
-    for (auto &Node : Nodes) {
-        NodeTy *Parent = getIDominator(Node.get());
         Node->addNewParent(Parent);
         Parent->addNewChild(Node.get());
     }
-
     Nodes.front()->T1();
 }
 
