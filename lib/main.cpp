@@ -1,6 +1,7 @@
 #include "ReducibleGraphTy.hpp"
 #include "DominanceTreeTy.hpp"
 #include "DJGraphTy.hpp"
+#include "DominanceFrontierTy.hpp"
 
 #include <iostream>
 #include <exception>
@@ -22,14 +23,20 @@ int main() {
         graph::DJGraphTy DJGraph{ReducibleGraph, DominanceTree};
         std::cout << "DJ-graph generation: done" << std::endl;
 
+        std::cout << "DF generation..." << std::endl;
+        graph::DominanceFrontierTy DominanceFrontier{ReducibleGraph, DominanceTree};
+        std::cout << "DF generation: done" << std::endl;
+
         #ifdef DUMP
         std::cout << "Graphs printing..." << std::endl; 
         ReducibleGraph.print();
         DominanceTree.print();
         DJGraph.print();
+        DominanceFrontier.print();
         system("dot -Tpng ReducibleGraph.dot -o Graph.png");
         system("dot -Tpng DomTree.dot -o DomTree.png");
         system("dot -Tpng DJGraph.dot -o DJGraph.png");
+        system("dot -Tpng DominanceFrontier.dot -o DominanceFrontier.png");
         std::cout << "Graphs printing: done" << std::endl;
         #endif
     } catch(std::exception &e) {

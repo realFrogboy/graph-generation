@@ -29,6 +29,8 @@ class DominanceTreeTy final : public GraphTy {
         void search(const ReducibleGraphTy &Graph);
         public:
         DominatorSearcher(const ReducibleGraphTy &Graph);
+
+        const std::set<NodeTy*> &getDominators(const size_t NodeID) const { return DominatorSets.at(NodeID); }
         size_t getIDominator(const size_t NodeID) const;
     };
 
@@ -39,6 +41,7 @@ class DominanceTreeTy final : public GraphTy {
 
     public:
     DominanceTreeTy(const ReducibleGraphTy &Graph);
+    const std::set<NodeTy*> &getDominators(const size_t NodeID) const { return DS->getDominators(NodeID); }
     void print() const { Dump(Nodes, "DomTree.dot"); }
 };
 

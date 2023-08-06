@@ -22,6 +22,9 @@ class NodeTy final {
     void reverseT1();
     void reverseT2(NodeTy *Node);
 
+    bool hasChildren() const { return !Children.empty(); }
+    bool hasParents() const { return !Parents.empty(); }
+
     const std::vector<NodeTy*> &getChildren() const { return Children; }
     const std::vector<NodeTy*> &getParents() const { return Parents; }
     unsigned getID() const { return NodeID; }
