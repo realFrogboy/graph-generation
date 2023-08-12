@@ -36,7 +36,16 @@ class DominanceTreeTy final : public GraphTy {
 
     public:
     DominanceTreeTy(const ReducibleGraphTy &Graph);
-    const std::set<NodeTy*> &getDominators(const size_t NodeID) const { return DS->getDominators(NodeID); }
+    std::set<size_t> getDominatorsIDs(const size_t NodeID) const { 
+        auto Dominators = DS->getDominators(NodeID);
+        std::set<size_t> DominatorsIDs;
+
+        std::transform(Dominators.begin(), Dominators.end(),
+                std::inserter(DominatorsIDs, DominatorsIDs.begin()),
+                [](auto Node){ return Node->getID(); });
+
+        return DominatorsIDs; 
+    }
     void print() const { Dump(Nodes, "DomTree.dot"); }
 };
 

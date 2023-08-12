@@ -24,7 +24,7 @@ int main() {
         std::cout << "DJ-graph generation: done" << std::endl;
 
         std::cout << "DF generation..." << std::endl;
-        graph::DominanceFrontierTy DominanceFrontier{ReducibleGraph, DominanceTree};
+        graph::DominanceFrontierTy DominanceFrontier{DominanceTree, DJGraph};
         std::cout << "DF generation: done" << std::endl;
 
         #ifdef DUMP

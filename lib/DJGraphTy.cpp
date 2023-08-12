@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <numeric>
+#include <iostream>
 
 namespace graph {
 
@@ -18,8 +19,10 @@ DJGraphTy::DJGraphTy(const ReducibleGraphTy &Graph, const DominanceTreeTy &Domin
 
         for (auto Child : ReducibleGraphNode->getChildren()) {
             NodeTy *ChildIDom = DominanceTree.getNode(Child->getID())->getParents().front();
-            if (ChildIDom->getID() != Node->getID())
+            if (ChildIDom->getID() != Node->getID()) {
                 Node->addNewChild(Nodes[Child->getID()].get());
+                JoinEdges.push_back({Node->getID(), Child->getID()});
+            }
         }
     }
 }

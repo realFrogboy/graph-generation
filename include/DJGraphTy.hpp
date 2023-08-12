@@ -13,11 +13,16 @@
 namespace graph {
 
 class DJGraphTy final : public GraphTy {
+    using EdgeTy = std::pair<size_t, size_t>;
+
+    std::vector<EdgeTy> JoinEdges;
     std::function<void(const std::vector<NodePtr> &, const std::string &)> Dump;
 
     public:
     DJGraphTy(const ReducibleGraphTy &Graph, const DominanceTreeTy &DominanceTree);
     void print() const { Dump(Nodes, "DJGraph.dot"); }
+
+    const std::vector<EdgeTy> &getJoinEdges() const { return JoinEdges; }
 };
 
 } // namespace graph

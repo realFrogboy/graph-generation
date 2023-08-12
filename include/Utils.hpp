@@ -5,7 +5,6 @@
 
 #include <memory>
 #include <limits>
-#include <iostream>
 
 namespace graph::utils {
 

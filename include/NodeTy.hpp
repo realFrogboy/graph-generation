@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 namespace graph {
 
@@ -24,6 +25,11 @@ class NodeTy final {
 
     bool hasChildren() const { return !Children.empty(); }
     bool hasParents() const { return !Parents.empty(); }
+
+    bool hasChild(const size_t NodeID) { 
+        auto It = std::find_if(Children.begin(), Children.end(), [NodeID](auto Child){ return Child->getID() == NodeID; });
+        return It != Children.end();
+    }
 
     const std::vector<NodeTy*> &getChildren() const { return Children; }
     const std::vector<NodeTy*> &getParents() const { return Parents; }
