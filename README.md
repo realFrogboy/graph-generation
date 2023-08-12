@@ -14,7 +14,7 @@ Receive a dominance frontier from a dominance tree and DJ-graph.
 
 ## Build
 
-```
+```sh
 mkdir build && cd build
 cmake ../
 cmake -DCMAKE_BUILD_TYPE=Release ./
@@ -22,8 +22,8 @@ cmake --build ./
 ```
 
 There are 2 executables: 
-1. `build/tools/custom`
-Receive input format:
+1. `build/tools/custom` <br />
+Receive input format: <br />
 **NOTE:** A node numbering should start with 0.
 ```
 NNodes
@@ -32,7 +32,7 @@ Node -> Node
 ...
 ```
 
-2. `build/tools/generation`
+2. `build/tools/generation` <br />
 Receive input format:
 ```
 NNodes
