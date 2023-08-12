@@ -3,22 +3,10 @@
 
 #include <fstream>
 #include <numeric>
+#include <iostream>
+#include <iterator>
 
 namespace graph {
-
-void DominanceTreeTy::DominatorSearcher::DFSTy::run(const NodeTy *Root) { 
-    std::vector<const NodeTy*> Stack{Root};
-    while (!Stack.empty()) {
-        const NodeTy *Node = Stack.back();
-        Stack.pop_back();
-
-        Positions.try_emplace(Node->getID(), Positions.size());
-
-        for (auto Child : Node->getChildren())
-            if (!Positions.count(Child->getID()))
-                Stack.push_back(Child);
-    }
-}
 
 std::set<NodeTy*> DominanceTreeTy::DominatorSearcher::Intersection(std::set<NodeTy*> &Lhs, std::set<NodeTy*> &Rhs) {
     if (Lhs.empty())
@@ -33,8 +21,8 @@ std::set<NodeTy*> DominanceTreeTy::DominatorSearcher::Intersection(std::set<Node
     return Intersection;
 }
 
-void DominanceTreeTy::DominatorSearcher::search(const ReducibleGraphTy &Graph) {
-    DFS->run(Graph.getRoot());
+void DominanceTreeTy::DominatorSearcher::search() {
+    RPO->run();
 
     // Dom(entry) = entry
     DominatorSets.front().insert(Graph.getRoot());
@@ -42,7 +30,7 @@ void DominanceTreeTy::DominatorSearcher::search(const ReducibleGraphTy &Graph) {
     bool Changed = 1;
     while (Changed) {
         Changed = 0;
-        for (auto &Node : Graph.getNodes()) {
+        for (auto &Node : RPO->getOrder()) {
             std::set<NodeTy*> Intersec;
             for (auto Parent : Node->getParents())
                 Intersec = Intersection(Intersec, DominatorSets[Parent->getID()]);
@@ -50,7 +38,7 @@ void DominanceTreeTy::DominatorSearcher::search(const ReducibleGraphTy &Graph) {
             if (Intersec.empty())
                 continue;
 
-            Intersec.insert(Node.get());
+            Intersec.insert(Node);
 
             if (DominatorSets[Node->getID()] == Intersec)
                 continue;
@@ -61,22 +49,22 @@ void DominanceTreeTy::DominatorSearcher::search(const ReducibleGraphTy &Graph) {
     }
 }
 
-DominanceTreeTy::DominatorSearcher::DominatorSearcher(const ReducibleGraphTy &Graph) : DFS{std::make_unique<DFSTy>()}, DominatorSets(Graph.getNNodes()) {
-    search(Graph);
+DominanceTreeTy::DominatorSearcher::DominatorSearcher(const GraphTy &Graph) : Graph{Graph}, RPO{std::make_unique<utils::RPOTy>(Graph)}, DominatorSets(Graph.getNNodes()) {
+    search();
 }
 
 size_t DominanceTreeTy::DominatorSearcher::getIDominator(const size_t NodeID) const {    
     size_t IDom = 0;
-    size_t DFSPos = 0;
+    size_t RPOPos = 0;
 
     for (auto Dominator : DominatorSets[NodeID]) {
         size_t DomID = Dominator->getID();
         if (DomID == NodeID)
             continue;
         
-        unsigned Pos = DFS->getPosition(DomID);
-        if (Pos > DFSPos) {
-            DFSPos = Pos;
+        unsigned Pos = RPO->getPosition(DomID);
+        if (Pos > RPOPos) {
+            RPOPos = Pos;
             IDom = DomID;
         }
     }

@@ -18,7 +18,8 @@ class GraphTy {
     NodeTy *getRoot() const { return Nodes.front().get(); }
     size_t getNNodes() const { return Nodes.size(); }
     NodeTy *getNode(const unsigned NodeID) const { return Nodes.at(NodeID).get(); }
-
+    const std::vector<NodePtr> &getNodes() const { return Nodes; }
+    
     virtual ~GraphTy() {}
 };
 

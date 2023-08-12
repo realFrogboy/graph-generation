@@ -24,8 +24,6 @@ class ReducibleGraphTy final : public GraphTy {
     public:
     ReducibleGraphTy(const size_t Size);
     void print() const { Dump(Nodes, "ReducibleGraph.dot"); }
-
-    const std::vector<NodePtr> &getNodes() const { return Nodes; }
 };
 
 } // namespace graph
