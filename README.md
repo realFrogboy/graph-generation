@@ -21,6 +21,13 @@ cmake -DCMAKE_BUILD_TYPE=Release ./
 cmake --build ./
 ```
 
+To build with graphviz dump run:
+
+```sh
+cmake -DCMAKE_BUILD_TYPE=Release -DDUMP=true ./
+cmake --build ./
+```
+
 There are 2 executables: 
 1. `build/tools/custom` <br />
 Receive input format: <br />
