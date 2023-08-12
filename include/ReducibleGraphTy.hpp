@@ -23,6 +23,7 @@ class ReducibleGraphTy final : public GraphTy {
 
     public:
     ReducibleGraphTy(const size_t Size);
+    ReducibleGraphTy(const size_t Size, const std::vector<EdgeTy> &Edges);
     void print() const { Dump(Nodes, "ReducibleGraph.dot"); }
 };
 

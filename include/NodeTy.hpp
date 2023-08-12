@@ -6,6 +6,8 @@
 
 namespace graph {
 
+using EdgeTy = std::pair<size_t, size_t>;
+
 class NodeTy final {
     std::vector<NodeTy*> Parents;
     std::vector<NodeTy*> Children;

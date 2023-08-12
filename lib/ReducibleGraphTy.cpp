@@ -1,3 +1,4 @@
+#include "Utils.hpp"
 #include "ReducibleGraphTy.hpp"
 
 #include <random>
@@ -8,6 +9,17 @@ namespace graph {
 ReducibleGraphTy::ReducibleGraphTy(const size_t Size) : GraphTy{}, Dump{GraphDumpTy{}} {
     Nodes.emplace_back(std::make_unique<NodeTy>(0));
     generate(Size); 
+}
+
+ReducibleGraphTy::ReducibleGraphTy(const size_t Size, const std::vector<EdgeTy> &Edges) : GraphTy{Size}, Dump{GraphDumpTy{}} {
+    std::iota(Nodes.begin(), Nodes.end(), utils::MakeUnique<NodeTy>(0));
+
+    for (auto Edge : Edges) {
+        Nodes[Edge.first]->addNewChild(Nodes[Edge.second].get());
+        Nodes[Edge.second]->addNewParent(Nodes[Edge.first].get());
+    }
+
+    Nodes.erase(std::remove_if(Nodes.begin(), Nodes.end(), [](auto &Node){ return !(Node->hasChildren() || Node->hasParents()); }), Nodes.end());
 }
 
 NodeTy *ReducibleGraphTy::getRandomNode() const {

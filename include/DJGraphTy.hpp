@@ -13,8 +13,6 @@
 namespace graph {
 
 class DJGraphTy final : public GraphTy {
-    using EdgeTy = std::pair<size_t, size_t>;
-
     std::vector<EdgeTy> JoinEdges;
     std::function<void(const std::vector<NodePtr> &, const std::string &)> Dump;
 

@@ -10,4 +10,31 @@ Receive a dominance tree from a reducible graph.
 Receive a DJ-garph from a reducible graph and its dominance tree. 
 
 ## 4. Dominance frontier generator
-Receive a dominance frontier from a reducible graph and its dominance tree. 
+Receive a dominance frontier from a dominance tree and DJ-graph. 
+
+## Build
+
+```
+mkdir build && cd build
+cmake ../
+cmake -DCMAKE_BUILD_TYPE=Release ./
+cmake --build ./
+```
+
+There are 2 executables: 
+1. `build/tools/custom`
+Receive input format:
+**NOTE:** A node numbering should start with 0.
+```
+NNodes
+Node -> Node
+Node -> Node
+...
+```
+
+2. `build/tools/generation`
+Receive input format:
+```
+NNodes
+```
+
